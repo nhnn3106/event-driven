@@ -1,0 +1,127 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #fff6f7;
+  --surface: #ffffff;
+  --surface-alt: #fff1f2;
+  --text: #2c1a1a;
+  --muted: #6b4f4f;
+  --accent: #c0272d;
+  --accent-dark: #8f1e24;
+  --border: rgba(192, 39, 45, 0.2);
+  --shadow: 0 20px 40px rgba(120, 20, 20, 0.15);
+  --ring: rgba(192, 39, 45, 0.3);
+  --font-sans: "Arial", "Helvetica Neue", sans-serif;
+
+  font: 16px/150% var(--font-sans);
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(255, 209, 209, 0.8),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 220, 204, 0.7),
+      transparent 45%
+    ),
+    #fff6f7;
+}
+
+#root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 700;
+  color: var(--text);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: var(--font-sans);
+}
+
+.seat-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  background: rgba(0,0,0,0.03);
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.seat-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.seat {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.seat.available {
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.seat.available:hover {
+  border-color: var(--accent);
+  transform: scale(1.1);
+}
+
+.seat.selected {
+  background: var(--accent);
+  color: #fff;
+  border: 1px solid var(--accent);
+  box-shadow: 0 0 8px var(--ring);
+}
+
+.seat.occupied {
+  background: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
