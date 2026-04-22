@@ -1,0 +1,3 @@
+export const USER_EVENTS_CLIENT = 'USER_EVENTS_CLIENT';
+export const USER_EVENTS_PUBLISHER = 'USER_EVENTS_PUBLISHER';
+export const USER_EVENTS_TOPIC = 'user-events';
