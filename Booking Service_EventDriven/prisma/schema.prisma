@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Booking {
+  id         String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String        @map("user_id") @db.Uuid
+  movieId    String        @map("movie_id") @db.Uuid
+  seatNumber    String        @map("seat_number") @db.VarChar(10)
+  totalPrice    Decimal       @map("total_price") @db.Decimal(10, 2)
+  paymentMethod String        @default("COD") @map("payment_method") @db.VarChar(50)
+  status        BookingStatus @default(PENDING)
+  createdAt  DateTime      @default(now()) @map("created_at")
+
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
