@@ -78,12 +78,19 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY_REGION1 }}
           script: |
+            # 1. Ép hệ thống nạp lại toàn bộ biến môi trường y như khi bạn tự SSH
+            source ~/.bash_profile || true
+            source ~/.bashrc || true
+            
+            # 2. Chạy các lệnh deploy bình thường
             mkdir -p ~/app
             cd ~/app
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
             echo "REGION2_IP=${{ secrets.EC2_HOST_REGION2 }}" >> .env
-            compose pull
-            compose up -d movie-service user-service booking-service
+            
+            # 3. Trả lại lệnh docker compose thuần túy
+            docker compose pull
+            docker compose up -d movie-service user-service booking-service
 
       - name: Copy docker-compose.yml to Region 2
         uses: appleboy/scp-action@v0.1.7
@@ -101,9 +108,16 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY_REGION2 }}
           script: |
+            # 1. Ép hệ thống nạp lại toàn bộ biến môi trường y như khi bạn tự SSH
+            source ~/.bash_profile || true
+            source ~/.bashrc || true
+            
+            # 2. Chạy các lệnh deploy bình thường
             mkdir -p ~/app
             cd ~/app
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
             echo "REGION2_IP=localhost" >> .env
-            compose pull
-            compose up -d payment-service notification-service postgres kafka zookeeper
+            
+            # 3. Trả lại lệnh docker compose thuần túy
+            docker compose pull
+            docker compose up -d payment-service notification-service postgres kafka zookeeper
