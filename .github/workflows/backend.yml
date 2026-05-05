@@ -93,44 +93,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Copy docker-compose.yml to Region 1
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST_REGION1 }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY_REGION1 }}
-          source: "docker-compose.yml"
-          target: "~/app"
-
-      - name: Deploy to Region 1
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST_REGION1 }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY_REGION1 }}
-          script: |
-            # 1. Ép hệ thống nạp lại toàn bộ biến môi trường y như khi bạn tự SSH
-            source ~/.bash_profile || true
-            source ~/.bashrc || true
-            
-            # 2. Chạy các lệnh deploy bình thường
-            mkdir -p ~/app
-            cd ~/app
-            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
-            echo "REGION2_IP=${{ secrets.EC2_HOST_REGION2 }}" >> .env
-            
-            # 3. Tự động kiểm tra và sử dụng lệnh docker compose phù hợp
-            if docker compose version > /dev/null 2>&1; then
-              COMPOSE_CMD="docker compose"
-            elif docker-compose version > /dev/null 2>&1; then
-              COMPOSE_CMD="docker-compose"
-            else
-              COMPOSE_CMD="/usr/local/bin/docker-compose"
-            fi
-            
-            $COMPOSE_CMD pull
-            $COMPOSE_CMD up -d movie-service user-service booking-service
-
       - name: Prepare Region 2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -184,3 +146,44 @@ jobs:
             
             $COMPOSE_CMD pull
             $COMPOSE_CMD up -d payment-service notification-service postgres kafka zookeeper
+
+      - name: Wait for Infrastructure to be ready
+        run: sleep 30
+
+      - name: Copy docker-compose.yml to Region 1
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST_REGION1 }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY_REGION1 }}
+          source: "docker-compose.yml"
+          target: "~/app"
+
+      - name: Deploy to Region 1
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST_REGION1 }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY_REGION1 }}
+          script: |
+            # 1. Ép hệ thống nạp lại toàn bộ biến môi trường y như khi bạn tự SSH
+            source ~/.bash_profile || true
+            source ~/.bashrc || true
+            
+            # 2. Chạy các lệnh deploy bình thường
+            mkdir -p ~/app
+            cd ~/app
+            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
+            echo "REGION2_IP=${{ secrets.EC2_HOST_REGION2 }}" >> .env
+            
+            # 3. Tự động kiểm tra và sử dụng lệnh docker compose phù hợp
+            if docker compose version > /dev/null 2>&1; then
+              COMPOSE_CMD="docker compose"
+            elif docker-compose version > /dev/null 2>&1; then
+              COMPOSE_CMD="docker-compose"
+            else
+              COMPOSE_CMD="/usr/local/bin/docker-compose"
+            fi
+            
+            $COMPOSE_CMD pull
+            $COMPOSE_CMD up -d movie-service user-service booking-service
