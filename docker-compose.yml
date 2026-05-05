@@ -1,6 +1,9 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    image: ${DOCKERHUB_USERNAME:-nhnn3106}/event-driven-postgres:latest
     container_name: eventdriven-postgres
     restart: unless-stopped
     environment:
@@ -11,7 +14,6 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init:/docker-entrypoint-initdb.d
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s

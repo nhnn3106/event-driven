@@ -26,6 +26,8 @@ jobs:
               - 'payment-service/**'
             notification:
               - 'notification-service/**'
+            postgres:
+              - 'postgres/**'
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -86,6 +88,16 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Build and Push Postgres Image
+        if: steps.filter.outputs.postgres == 'true'
+        uses: docker/build-push-action@v5
+        with:
+          context: ./postgres
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/event-driven-postgres:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -115,7 +127,7 @@ jobs:
           host: ${{ secrets.EC2_HOST_REGION2 }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY_REGION2 }}
-          source: "docker-compose.yml,postgres"
+          source: "docker-compose.yml"
           target: "~/app"
 
       - name: Deploy to Region 2
