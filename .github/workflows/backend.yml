@@ -11,6 +11,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Detect changes
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            user:
+              - '-KTPM-Lab08_EventDriven/**'
+            movie:
+              - 'movie-service/**'
+            booking:
+              - 'Booking Service_EventDriven/**'
+            payment:
+              - 'payment-service/**'
+            notification:
+              - 'notification-service/**'
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -21,39 +37,54 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build and Push User Service
+        if: steps.filter.outputs.user == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./-KTPM-Lab08_EventDriven
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/event-driven-user-service:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build and Push Movie Service
+        if: steps.filter.outputs.movie == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./movie-service
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/event-driven-movie-service:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build and Push Booking Service
+        if: steps.filter.outputs.booking == 'true'
         uses: docker/build-push-action@v5
         with:
           context: "./Booking Service_EventDriven"
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/event-driven-booking-service:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build and Push Payment Service
+        if: steps.filter.outputs.payment == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./payment-service
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/event-driven-payment-service:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build and Push Notification Service
+        if: steps.filter.outputs.notification == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./notification-service
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/event-driven-notification-service:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deploy:
     needs: build-and-push
