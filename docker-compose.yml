@@ -43,6 +43,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_HEAP_OPTS: "-Xmx256M -Xms256M"
     healthcheck:
       test: [ "CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list || exit 1" ]
       interval: 10s
