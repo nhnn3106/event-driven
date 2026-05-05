@@ -134,7 +134,7 @@ jobs:
             mkdir -p ~/app
             cd ~/app
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
-            echo "REGION2_IP=localhost" >> .env
+            echo "REGION2_IP=${{ secrets.EC2_HOST_REGION2 }}" >> .env
             
             # 3. Tự động kiểm tra và sử dụng lệnh docker compose phù hợp
             if docker compose version > /dev/null 2>&1; then
