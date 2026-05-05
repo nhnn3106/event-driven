@@ -1,12 +1,6 @@
-const USER_SERVICE_URL = (
-  // import.meta.env.VITE_USER_SERVICE_URL || 
-  'http://localhost:8081/api')
-export const MOVIE_SERVICE_URL = (
-  // import.meta.env.VITE_MOVIE_SERVICE_URL || 
-  'http://localhost:8082/api')
-export const BOOKING_SERVICE_URL = (
-  // import.meta.env.VITE_BOOKING_SERVICE_URL || 
-  'http://localhost:8083/api')
+const USER_SERVICE_URL = import.meta.env.VITE_USER_SERVICE_URL || 'http://localhost:8081/api'
+export const MOVIE_SERVICE_URL = import.meta.env.VITE_MOVIE_SERVICE_URL || 'http://localhost:8082/api'
+export const BOOKING_SERVICE_URL = import.meta.env.VITE_BOOKING_SERVICE_URL || 'http://localhost:8083/api'
 
 export const apiClient = {
   user: {

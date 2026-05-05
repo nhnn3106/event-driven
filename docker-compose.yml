@@ -64,11 +64,6 @@ services:
       - JWT_SECRET=super-secret-key
       - JWT_EXPIRES_IN=15m
       - PORT=8081
-    depends_on:
-      postgres:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
 
   movie-service:
     build:
@@ -84,11 +79,6 @@ services:
       - KAFKA_CLIENT_ID=movie-service
       - PORT=8082
       - NODE_ENV=production
-    depends_on:
-      postgres:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
 
   booking-service:
     build:
@@ -102,11 +92,6 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@${REGION2_IP:-postgres}:5432/booking_service?sslmode=disable
       - KAFKA_BROKER=${REGION2_IP:-kafka}:29092
       - PORT=8083
-    depends_on:
-      postgres:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
 
   payment-service:
     build:
@@ -122,11 +107,6 @@ services:
       - DB_PASSWORD=postgres
       - KAFKA_BROKER=${REGION2_IP:-kafka}:29092
       - PORT=8084
-    depends_on:
-      postgres:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
 
   notification-service:
     build:
@@ -142,11 +122,6 @@ services:
       - DB_PASSWORD=postgres
       - KAFKA_BROKER=${REGION2_IP:-kafka}:29092
       - PORT=8085
-    depends_on:
-      postgres:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
 
 volumes:
   postgres_data:
