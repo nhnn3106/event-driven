@@ -89,8 +89,8 @@ jobs:
             echo "REGION2_IP=${{ secrets.EC2_HOST_REGION2 }}" >> .env
             
             # 3. Trả lại lệnh docker compose thuần túy
-            docker compose pull
-            docker compose up -d movie-service user-service booking-service
+            docker-compose pull
+            docker-compose up -d movie-service user-service booking-service
 
       - name: Copy docker-compose.yml to Region 2
         uses: appleboy/scp-action@v0.1.7
@@ -119,5 +119,5 @@ jobs:
             echo "REGION2_IP=localhost" >> .env
             
             # 3. Trả lại lệnh docker compose thuần túy
-            docker compose pull
-            docker compose up -d payment-service notification-service postgres kafka zookeeper
+            docker-compose pull
+            docker-compose up -d payment-service notification-service postgres kafka zookeeper
