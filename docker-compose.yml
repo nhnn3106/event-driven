@@ -115,7 +115,6 @@ services:
       - PORT=8084
       - KAFKAJS_NO_PARTITIONER_WARNING=1
     depends_on:
-      - eventdriven-postgres
       - eventdriven-kafka
 
   notification-service:
@@ -134,7 +133,6 @@ services:
       - PORT=8085
       - KAFKAJS_NO_PARTITIONER_WARNING=1
     depends_on:
-      - eventdriven-postgres
       - eventdriven-kafka
 
 volumes:
