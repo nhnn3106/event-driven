@@ -100,6 +100,16 @@ jobs:
             $COMPOSE_CMD pull
             $COMPOSE_CMD up -d movie-service user-service booking-service
 
+      - name: Prepare Region 2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST_REGION2 }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY_REGION2 }}
+          script: |
+            mkdir -p ~/app
+            sudo rm -rf ~/app/postgres
+
       - name: Copy docker-compose.yml to Region 2
         uses: appleboy/scp-action@v0.1.7
         with:
