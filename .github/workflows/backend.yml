@@ -107,8 +107,14 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY_REGION2 }}
           script: |
+            # 1. Dừng các container đang chạy để giải phóng file
+            cd ~/app && docker compose down || true
+            
+            # 2. Xóa sạch thư mục cũ với quyền sudo (không hỏi pass)
+            sudo rm -rf ~/app
+            
+            # 3. Tạo lại thư mục sạch sẽ
             mkdir -p ~/app
-            sudo rm -rf ~/app/postgres
 
       - name: Copy docker-compose.yml to Region 2
         uses: appleboy/scp-action@v0.1.7
