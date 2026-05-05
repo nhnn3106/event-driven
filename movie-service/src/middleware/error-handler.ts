@@ -27,6 +27,7 @@ export const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
   }
 
   const message = error instanceof Error ? error.message : "Unexpected error";
+  console.error("Unhandled application error:", error);
   logger.error(
     { err: message, path: req.originalUrl, method: req.method },
     "Unhandled application error",

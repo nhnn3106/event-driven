@@ -54,7 +54,7 @@ export async function updateMovieHandler(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const body = updateMovieSchema.parse(req.body);
     const movie = await movieService.updateMovie(id, body);
     movieEvents.broadcast('MOVIE_UPDATED', movie);
@@ -70,7 +70,7 @@ export async function deleteMovieHandler(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     await movieService.deleteMovie(id);
     movieEvents.broadcast('MOVIE_DELETED', { id });
     res.status(204).send();

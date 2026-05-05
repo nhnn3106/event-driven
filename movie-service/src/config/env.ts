@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import { z } from "zod";
 
 dotenv.config();
+dotenv.config({ path: "movie-service.env" });
 
 const environmentSchema = z.object({
   NODE_ENV: z
