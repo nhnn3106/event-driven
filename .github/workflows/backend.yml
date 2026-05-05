@@ -82,8 +82,8 @@ jobs:
             cd ~/app
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
             echo "REGION2_IP=${{ secrets.EC2_HOST_REGION2 }}" >> .env
-            /usr/bin/docker compose pull
-            /usr/bin/docker compose up -d movie-service user-service booking-service
+            compose pull
+            compose up -d movie-service user-service booking-service
 
       - name: Copy docker-compose.yml to Region 2
         uses: appleboy/scp-action@v0.1.7
@@ -105,5 +105,5 @@ jobs:
             cd ~/app
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
             echo "REGION2_IP=localhost" >> .env
-            /usr/bin/docker compose pull
-            /usr/bin/docker compose up -d payment-service notification-service postgres kafka zookeeper
+            compose pull
+            compose up -d payment-service notification-service postgres kafka zookeeper
