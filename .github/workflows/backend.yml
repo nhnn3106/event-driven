@@ -88,9 +88,17 @@ jobs:
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
             echo "REGION2_IP=${{ secrets.EC2_HOST_REGION2 }}" >> .env
             
-            # 3. Trả lại lệnh docker compose thuần túy
-            docker-compose pull
-            docker-compose up -d movie-service user-service booking-service
+            # 3. Tự động kiểm tra và sử dụng lệnh docker compose phù hợp
+            if docker compose version > /dev/null 2>&1; then
+              COMPOSE_CMD="docker compose"
+            elif docker-compose version > /dev/null 2>&1; then
+              COMPOSE_CMD="docker-compose"
+            else
+              COMPOSE_CMD="/usr/local/bin/docker-compose"
+            fi
+            
+            $COMPOSE_CMD pull
+            $COMPOSE_CMD up -d movie-service user-service booking-service
 
       - name: Copy docker-compose.yml to Region 2
         uses: appleboy/scp-action@v0.1.7
@@ -118,6 +126,14 @@ jobs:
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
             echo "REGION2_IP=localhost" >> .env
             
-            # 3. Trả lại lệnh docker compose thuần túy
-            docker-compose pull
-            docker-compose up -d payment-service notification-service postgres kafka zookeeper
+            # 3. Tự động kiểm tra và sử dụng lệnh docker compose phù hợp
+            if docker compose version > /dev/null 2>&1; then
+              COMPOSE_CMD="docker compose"
+            elif docker-compose version > /dev/null 2>&1; then
+              COMPOSE_CMD="docker-compose"
+            else
+              COMPOSE_CMD="/usr/local/bin/docker-compose"
+            fi
+            
+            $COMPOSE_CMD pull
+            $COMPOSE_CMD up -d payment-service notification-service postgres kafka zookeeper
