@@ -65,6 +65,7 @@ export const BookingsPage = () => {
   const cols = [1, 2, 3, 4, 5, 6, 7, 8];
 
   const handleSeatClick = (seat: string) => {
+    if (!Array.isArray(bookingsState.occupiedSeats)) return;
     if (bookingsState.occupiedSeats.includes(seat)) return;
     setBookingForm(p => ({ ...p, seatNumber: seat }));
   };
@@ -91,7 +92,7 @@ export const BookingsPage = () => {
                   <div key={r} className="seat-row">
                     {cols.map(c => {
                       const seatId = `${r}${c}`;
-                      const isOccupied = bookingsState.occupiedSeats.includes(seatId);
+                      const isOccupied = Array.isArray(bookingsState.occupiedSeats) && bookingsState.occupiedSeats.includes(seatId);
                       const isSelected = bookingForm.seatNumber === seatId;
                       return (
                         <div 

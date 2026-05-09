@@ -91,7 +91,10 @@ const moviesSlice = createSlice({
             })
             .addCase(createMovie.fulfilled, (state, action) => {
                 if (Array.isArray(state.items)) {
-                    state.items = [action.payload, ...state.items]
+                    const existing = state.items.find(m => m.id === action.payload.id);
+                    if (!existing) {
+                        state.items = [action.payload, ...state.items]
+                    }
                 } else {
                     state.items = [action.payload]
                 }

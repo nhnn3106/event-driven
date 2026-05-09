@@ -89,7 +89,10 @@ const bookingsSlice = createSlice({
                 state.error = action.error.message ?? 'Fetch bookings failed'
             })
             .addCase(createBooking.fulfilled, (state, action) => {
-                state.items = [action.payload, ...state.items]
+                const existing = state.items.find(b => b.id === action.payload.id);
+                if (!existing) {
+                    state.items = [action.payload, ...state.items]
+                }
             })
             .addCase(updateBookingStatus.fulfilled, (state, action) => {
                 const index = state.items.findIndex(b => b.id === action.payload.id);
